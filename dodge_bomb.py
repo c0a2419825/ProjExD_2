@@ -53,7 +53,6 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
-
         if kk_rct.colliderect(bb_rct):
             print("Game Over")
             return
