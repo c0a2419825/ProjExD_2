@@ -38,7 +38,7 @@ def gameover(screen: pg.Surface) -> None:
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     """
-    作成途中、
+    作成途中、issues#1
     """
     bb_accs = [a for a in range(1, 11)]
     for r in range(1, 11):
