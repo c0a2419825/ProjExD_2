@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -13,6 +14,26 @@ DELTA = {
 }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
+def gameover(screen: pg.Surface) -> None:
+    """
+    n_img:画面全体を黒くする
+    nn_img:ぐったりとした鳥
+    txt:画面に表示する文字
+    """
+    n_img = pg.Surface((WIDTH, HEIGHT))
+    nn_img = pg.image.load("fig/8.png")
+    pg.draw.rect(n_img,(0,0,0),pg.Rect(0,0,WIDTH,HEIGHT))
+    n_img.set_alpha(150)
+    screen.blit(n_img,[0,0])
+    fonto = pg.font.Font(None,80)
+    txt=fonto.render("Game Over",
+                        True, (255,255,255))
+    screen.blit(txt,[400,300])
+    screen.blit(nn_img, [300,300])
+    screen.blit(nn_img, [800,300])
+    pg.display.update()
+    time.sleep(5)
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
@@ -27,6 +48,8 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
     if rct.top < 0 or HEIGHT < rct.bottom:  #画面外だったら
         tate = False
     return (yoko, tate)
+
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -54,8 +77,11 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
-            print("Game Over")
+            gameover(screen)
             return
+            # pg.draw.rect(bb_img,(0,0,0),(0,0),0)
+            # bb_img.set_colorkey(0,0,0)
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
 
@@ -76,8 +102,6 @@ def main():
         if check_bound(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
         
-
-
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy)  # 爆弾の移動
         yoko, tate = check_bound(bb_rct)
